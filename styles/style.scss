@@ -1,0 +1,66 @@
+@mixin mainText {
+    font-size: 25px;
+    color: peru;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+@mixin titleText {
+    font-size: 35px;
+    color:black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+ body{
+     user-select: none;
+ }
+
+.inp {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    @include mainText();   
+}
+
+.main-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    
+    &__checkb {
+        width: 30px;
+        height: 30px;
+    }
+
+    &__wLength {
+        width: 60px;
+        height: 30px;
+    }
+    
+    &__filter {
+        width: 60px;
+        height: 30px;
+    }
+
+}
+
+.textOut {
+    @include mainText();
+    width: 60%;
+    text-align: center;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.mainText {
+    margin: 10px 0 10px 0;
+    text-align: center;
+    @include mainText();
+}
+
+.titleTxt{
+    @include titleText();
+    text-align: center;
+    margin: 20px 0 20px 0;
+}
