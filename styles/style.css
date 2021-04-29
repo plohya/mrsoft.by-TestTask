@@ -18,15 +18,15 @@ body {
   margin-top: 30px;
   margin-bottom: 30px;
 }
-.main-container__checkb {
+.main-container__checkbox {
   width: 30px;
   height: 30px;
 }
-.main-container__wLength {
+.main-container__btnLength {
   width: 60px;
   height: 30px;
 }
-.main-container__filter {
+.main-container__btnFilter {
   width: 60px;
   height: 30px;
 }
