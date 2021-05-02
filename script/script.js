@@ -1,56 +1,57 @@
 const $input = document.querySelector('.inp'),
-      $checkbox = document.querySelector('.main-container__checkbox'),
-      $btnLength = document.querySelector('.main-container__btnLength'),
-      $btnFilter = document.querySelector('.main-container__btnFilter');
-
+$checkbox = document.querySelector('.main-container__checkbox'),
+$btnLength = document.querySelector('.main-container__btnLength'),
+$btnFilter = document.querySelector('.main-container__btnFilter');
+let checkFetch = false;
 let $output = document.querySelector('.textOut');
+let data = [];
 
-      $btnLength.addEventListener('click', onBtnLengthClick);
-      $btnFilter.addEventListener('click', onBtnFilterClick);
 
-    function aboutFetch(url, option) {
-        fetch(url)
-            .then(response => response.json())
-            .then(data =>  {
-                let msg = '';
-                for(let item in data) {
-                    if(isNaN(option)) {
-                        console.log('String entered');
-                    } else {
-                        console.log('Number entered');
-                    }
-                    $output.innerHTML = data[item];
-                }
-            })
-            .catch(function(err) {
-                console.log(`Error: ${err}`);
-            });
-    }
+aboutFetch('http://www.mrsoft.by/data.json', $input.value);
 
-    function onBtnLengthClick() {
-        if(isCheckboxChecked()) {
-            console.log('Учитываем регистр');
-        } else {
-            console.log('Не учитываем регистр');
+
+function aboutFetch(url) {
+    fetch(url)
+    .then(response => response.json())
+    .then(info =>  {
+        checkFetch = true;
+        for(let item in info) {
+            data = info[item];
+            // return data;
         }
-        aboutFetch('http://www.mrsoft.by/data.json', $input.value);
-    }
+    })
+    .catch(function(err) {
+        console.log(`Error: ${err}`);
+    });
+}
 
-    function onBtnFilterClick() {
-        if(isCheckboxChecked()) {
-            console.log('Учитываем регистр');
-        } else {
-            console.log('Не учитываем регистр');
-        }
-        aboutFetch('http://www.mrsoft.by/data.json', $input.value);
+document.addEventListener('click', (e) => {
+    if(e.target === $btnLength) {
+        onBtnLengthClick();
+    } else if(e.target === $btnFilter) {
+        onBtnFilterClick();
     }
+}); 
 
-    function isCheckboxChecked() {
-        if($checkbox.checked) {
-            console.log('checkbox clicked');
-            return true;
-        } else {
-            console.log('checkbox not clicked');
-            return false;
-        }
+function onBtnLengthClick() {
+    inputCheck();
+    console.log(data);
+}
+
+function onBtnFilterClick() {
+    inputCheck();
+    console.log(data);
+}
+
+function inputCheck() {
+    const enteredValue = Number($input.value.trim());
+    if(enteredValue === 0) {
+        console.log('empty');
+    } else if(isNaN(enteredValue)) {
+        // function for string entered
+        console.log('string');
+    } else if(!isNaN(enteredValue)) {
+        // function for number entered
+        console.log('number');
     }
+}
