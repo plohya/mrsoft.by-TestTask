@@ -45,12 +45,17 @@
 
 }
 
+.stringsCount{
+    @include mainText();
+    width: 20%;
+    margin-left: 5%;
+}
+
 .textOut {
     @include mainText();
     width: 60%;
-    text-align: center;
-    margin-left: 20%;
-    margin-right: 20%;
+    text-align: left;
+    margin-left: 5%;
 }
 
 .mainText {

@@ -31,14 +31,21 @@ body {
   height: 30px;
 }
 
+.stringsCount {
+  font-size: 25px;
+  color: peru;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  width: 20%;
+  margin-left: 5%;
+}
+
 .textOut {
   font-size: 25px;
   color: peru;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   width: 60%;
-  text-align: center;
-  margin-left: 20%;
-  margin-right: 20%;
+  text-align: left;
+  margin-left: 5%;
 }
 
 .mainText {
