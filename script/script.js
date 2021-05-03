@@ -11,7 +11,7 @@ let $output = document.querySelector('.textOut'),
 
 let data, resultArr = [];
 
-getData('http://www.mrsoft.by/data.json');
+getData('https://www.mrsoft.by/data.json');
 
 // Подписываем на событие весь документ
 document.addEventListener('click', (e) => {
