@@ -1,5 +1,6 @@
 'use sctict';
 
+// Объявление переменных
 const $input = document.querySelector('.inp'),
       $checkbox = document.querySelector('.main-container__checkbox'),
       $btnLength = document.querySelector('.main-container__btnLength'),
@@ -10,16 +11,21 @@ let $output = document.querySelector('.textOut'),
 
 let data, resultArr = [];
 
-const oops = getData('http://www.mrsoft.by/data.json');
+getData('http://www.mrsoft.by/data.json');
 
-// Try to take data from return in getData. Now it takes by declaration data from getData and using like a local variable
-// Input gets clear by 'click', not by focus
-// inputCheck() needs to be 2 functions, not one
-// add parameters for functions
-// add features for exceptions
-// create view.js and script.js as 2 scripts
-// maybe come back to $element.addEventL from doc.addEventL
+// Подписываем на событие весь документ
+document.addEventListener('click', (e) => {
+    if(e.target === $btnLength) {
+        onBtnLengthClick($input.value, data);
+    } else if(e.target === $btnFilter) {
+        onBtnFilterClick($input.value, data);
+    } else if (e.target === $input) {
+        $output.innerHTML = '';
+        $stringsCount.innerHTML = '';
+    }
+}); 
 
+// Функция, которая получает данные по HTTP запросу
 function getData(url) {
     fetch(url)
     .then(response => response.json())
@@ -31,134 +37,64 @@ function getData(url) {
     .catch(function(err) {
         console.log(`Error: ${err}`);
     }); 
-    return data;
 }
 
-document.addEventListener('click', (e) => {
-    if(e.target === $btnLength) {
-        onBtnLengthClick();
-    } else if(e.target === $btnFilter) {
-        onBtnFilterClick();
-    } else if (e.target === $input) {
-        // $input.value = '';
-        $output.innerHTML = '';
-        $stringsCount.innerHTML = '';
-    }
-}); 
+// Было бы удобнее сделать одну кнопку, которая решала бы по какому параметру ей искать 
+// (по длине или по подстроке) исходя из введенного значение
 
+// Функция, которая начинает выполнение других функция, в зависимости от нажатой кнопки (нажата кнопка поиска по длине строки)
+function onBtnLengthClick(value, fromData) {
+    inputCheck(value, 'length');
+    findForLength(value, fromData);
+    toOutput($output, $stringsCount, resultArr);
+    resultArr = [];
+}
 
-// function inputCheck() {
-    //     const enteredValue = Number($input.value.trim());
-    //     if(enteredValue === 0) {
-        //         console.log('empty');
-        //         alert('Please, enter something!');
-        //     } else if(isNaN(enteredValue)) {
-            //         console.log('string');
-            //         // function for string entered
-            //         data.forEach(item => {
-                //             if($checkbox.checked) {
-                    //                 // 'aAa' != 'aaa'
-                    //                 console.log(item.indexOf($input.value.trim()));
-                    //                 if(item.indexOf($input.value.trim()) != -1) {
-                        //                     resultArr.push(item);
-                        //                 }
-                        //             } else {
-                            //                 // 'aAa' === 'aaa'
-                            //                 console.log(item.indexOf($input.value.trim()));
-                            //                 if(item.toLowerCase().indexOf($input.value.toLowerCase().trim()) != -1) {
-                                //                     resultArr.push(item);
-                                //                 }
-                                //             }
-                                //         });
-                                //         $output.innerHTML = `Output strings: <br> ${resultArr}`;
-                                //         // $stringsCount.innerHTML = resultArr.length;
-                                //         $stringsCount.innerHTML = `Amount of output strings: <br> ${resultArr.length}`;
-                                //         resultArr = [];
-                                
-                                //     } else if(!isNaN(enteredValue)) {
-                                    //         // function for number entered
-                                    //         console.log('number');
-                                    //     {
-    
-//             data.forEach(item => {
-//                 if(item.length > enteredValue) {
-//                     console.log(item.length);
-//                     resultArr.push(item);
-//             }});
-//             // $output.innerHTML = resultArr;
-//             $output.innerHTML = `Output strings: <br> ${resultArr}`;
-//             $stringsCount.innerHTML = `Amount of output strings: <br> ${resultArr.length}`;
-//             resultArr = [];
-//         }
-//     }
-// }
+// Функция, которая начинает выполнение других функция, в зависимости от нажатой кнопки (нажата кнопка поиска по подстроке)
+function onBtnFilterClick(value, fromData) {
+    findForSubstring(value, fromData);
+    toOutput($output, $stringsCount, resultArr);
+    resultArr = [];
+}
 
-
-function inputCheck() {
-    // const enteredValue = Number($input.value.trim());
-    const enteredValue = $input.value.trim();
+// Функция, которая проверяет правильная ли кнопка нажата, в зависимости от введенного в input значения 
+function inputCheck(value, filter) {
+    const enteredValue = value.trim();
     if(enteredValue === '') {
-        console.log('empty');
-        alert('Please, enter something!');
-    } else if(isNaN(Number(enteredValue))) {
-        findForSubstring(enteredValue);
-        toOutput($output, $stringsCount, resultArr);
-        // $output.innerHTML = `Output strings: <br> ${resultArr}`;
-        // $stringsCount.innerHTML = resultArr.length;
-        // $stringsCount.innerHTML = `Amount of output strings: <br> ${resultArr.length}`;
-        resultArr = [];
-    } else if(!isNaN(Number(enteredValue))) {
-        // function for number entered
-        findForLength(enteredValue);
-            // $output.innerHTML = resultArr;
-            toOutput($output, $stringsCount, resultArr);
-            // $output.innerHTML = `Output strings: <br> ${resultArr}`;
-            // $stringsCount.innerHTML = `Amount of output strings: <br> ${resultArr.length}`;
-            resultArr = [];
-    }
+        alert('Please, enter something! (if you need to find something :) )');
+    } else if(isNaN(Number(enteredValue)) && filter === 'length') {    
+        alert('You need to Enter a number (for this button)');
+    } 
 }
 
-function onBtnLengthClick() {
-    inputCheck();
+// Функция поиска по длине строки
+function findForLength(value, fromData) {
+    fromData.forEach(item => {
+        if(item.length > value) {
+            resultArr.push(item);
+        }
+    });
 }
 
-function onBtnFilterClick() {
-    inputCheck();
-    
-}
-
-function findForLength(value) {
-console.log('number');
-            data.forEach(item => {
-                if(item.length > value) {
-                    console.log(item.length);
-                    resultArr.push(item);
-            }});
-}
-
-function findForSubstring(value) {
-    console.log('string');
-    // function for string entered
-    data.forEach(item => {
+// Функция поиска по подстроке
+function findForSubstring(value, fromData) {    
+    fromData.forEach(item => {
         if($checkbox.checked) {
-            // 'aAa' != 'aaa'
-            // console.log(item.indexOf($input.value.trim()));
-            if(item.indexOf($input.value.trim()) != -1) {
+            // case sensitive
+            if(item.indexOf(value.trim()) != -1) {
                 resultArr.push(item);
             }
         } else {
-            // 'aAa' === 'aaa'
-            // console.log(item.indexOf($input.value.trim()));
-            if(item.toLowerCase().indexOf($input.value.toLowerCase().trim()) != -1) {
+            // case insensitive
+            if(item.toLowerCase().indexOf(value.toLowerCase().trim()) != -1) {
                 resultArr.push(item);
             }
         }
     });
 }
 
+// Функция вывода результата в специальное поле
 function toOutput(outputForStrings, outputForAmount, resultArray) {
     outputForStrings.innerHTML = `Output strings: <br> ${resultArray}`;
-    // $stringsCount.innerHTML = resultArr.length;
     outputForAmount.innerHTML = `Amount of output strings: <br> ${resultArray.length}`;
-    // resultArray = [];
 }
